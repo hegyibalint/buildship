@@ -63,7 +63,7 @@ public class DeclarativeGradleConnectionProvider extends ProcessStreamConnection
             IExecutionEnvironment java11Environment = null;
 
             for (IExecutionEnvironment environment : executionEnvironments) {
-                if (environment.getId().equals("JavaSE-8")) {
+                if (environment.getId().equals("JavaSE-11")) {
                     java11Environment = environment;
                     break;
                 }
