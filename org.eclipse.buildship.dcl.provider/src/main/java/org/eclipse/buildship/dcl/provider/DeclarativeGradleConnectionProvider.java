@@ -20,7 +20,7 @@ import java.util.List;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.FrameworkUtil;
-
+import org.eclipse.buildship.core.internal.CorePlugin;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.Platform;
@@ -47,19 +47,20 @@ public class DeclarativeGradleConnectionProvider extends ProcessStreamConnection
         return log;
     }
 
+    @SuppressWarnings("restriction")
     public DeclarativeGradleConnectionProvider() {
         Bundle bundle = FrameworkUtil.getBundle(DeclarativeGradleConnectionProvider.class);
         try {
             URL localFileURL = FileLocator.toFileURL(bundle.getEntry("/"));
             Path pathToPlugin = Paths.get(localFileURL.toURI());
 
-            // String pathToServer = pathToPlugin.resolve("libs/language-server.jar").toString();
-
-            // TODO: Temporary patch for testing
-            String pathToServer = "/Users/bhegyi/Developer/Coding/declarative-lsp/lsp/build/libs/lsp-all.jar";
+            // Get the LSP JAR path
+            final String lspJarPath = CorePlugin.configurationManager().loadWorkspaceConfiguration().getLspJarPath();
+            if (lspJarPath.isBlank()) {
+                throw new RuntimeException("LSP JAR path is not set!");
+            }
 
             IExecutionEnvironment[] executionEnvironments = JavaRuntime.getExecutionEnvironmentsManager().getExecutionEnvironments();
-
             IExecutionEnvironment java11Environment = null;
 
             for (IExecutionEnvironment environment : executionEnvironments) {
@@ -85,7 +86,7 @@ public class DeclarativeGradleConnectionProvider extends ProcessStreamConnection
                 List<String> commands = Arrays.asList(
                         pathToJavaExecutable,
                         //"-agentlib:jdwp=transport=dt_socket,server=n,address=localhost:5015,suspend=y",
-                        "-jar", pathToServer);
+                        "-jar", lspJarPath);
 
                 // add in commands path to bin application of language server
                 setCommands(commands);
