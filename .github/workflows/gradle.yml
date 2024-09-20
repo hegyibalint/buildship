@@ -31,7 +31,7 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x eclipseTest '-Pbuild.invoker=ci'
 
-  publish:
+  publish-update-site:
     needs: build
     runs-on: ubuntu-latest
     permissions:
