@@ -59,3 +59,5 @@ jobs:
         uses: actions/upload-pages-artifact@v3
         with:
           path: "./org.eclipse.buildship.site/build/repository"
+      - name: Deploy to GitHub Pages
+        uses: actions/deploy-pages@v4
