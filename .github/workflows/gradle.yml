@@ -8,9 +8,9 @@ on:
 jobs:
   build:
     strategy:
-        fail-fast: false
-        matrix:
-            os: [ubuntu-latest, windows-latest, macos-latest]
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -18,12 +18,12 @@ jobs:
         uses: actions/setup-java@v4
         with:
           java-version: 8
-          distribution: 'zulu'
+          distribution: "zulu"
       - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
           java-version: 11
-          distribution: 'temurin'
+          distribution: "temurin"
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -31,4 +31,25 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x eclipseTest '-Pbuild.invoker=ci'
 
-
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up JDK 11
+        uses: actions/setup-java@v4
+        with:
+          java-version: 11
+          distribution: "temurin"
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
+      - name: Package the update site
+        run: ./gradlew createP2Repository
+      - name: Publish P2 repository as GH Page
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./org.eclipse.buildship.site/build/repository
