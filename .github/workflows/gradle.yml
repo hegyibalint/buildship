@@ -56,6 +56,6 @@ jobs:
       - name: Package the update site
         run: ./gradlew createP2Repository
       - name: Upload Pages Artifact
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: "./org.eclipse.buildship.site/build/repository"
