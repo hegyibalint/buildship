@@ -34,6 +34,13 @@ jobs:
   publish:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -48,8 +55,7 @@ jobs:
           develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
       - name: Package the update site
         run: ./gradlew createP2Repository
-      - name: Publish P2 repository as GH Page
-        uses: peaceiris/actions-gh-pages@v4
+      - name: Upload Pages Artifact
+        uses: actions/upload-pages-artifact@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./org.eclipse.buildship.site/build/repository
+          path: "./org.eclipse.buildship.site/build/repository"
