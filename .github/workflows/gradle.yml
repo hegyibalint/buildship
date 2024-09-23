@@ -54,7 +54,7 @@ jobs:
         with:
           develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
       - name: Package the update site
-        run: ./gradlew createP2Repository
+        run: ./gradlew createP2Repository -Pci=true
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
