@@ -40,6 +40,8 @@ include ':org.eclipse.buildship.oomph'
 include ':org.eclipse.buildship.oomph.edit'
 include ':org.eclipse.buildship.oomph.feature'
 include ':org.eclipse.buildship.oomph.test'
+include ':org.eclipse.buildship.dcl.feature'
+include ':org.eclipse.buildship.dcl.provider'
 
 // Use local build cache on developer machine and remote cache on CI
 String cacheUrl = System.getProperty('gradle.cache.remote.url', '')
