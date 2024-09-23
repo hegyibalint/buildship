@@ -29,7 +29,7 @@ jobs:
         with:
           develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
       - name: Build with Gradle
-        run: ./gradlew build -x eclipseTest '-Pbuild.invoker=ci'
+        run: ./gradlew build -x eclipseTest -Platest=true -Peclipse.version=431 -Pbuild.invoker=ci
 
   publish-update-site:
     needs: build
@@ -54,7 +54,7 @@ jobs:
         with:
           develocity-access-key: ${{ secrets.DEVELOCITY_ACCESS_KEY }}
       - name: Package the update site
-        run: ./gradlew createP2Repository -Pci=true
+        run: ./gradlew createP2Repository -Platest=true -Peclipse.version=431 -Pbuild.invoker=ci
       - name: Upload Pages Artifact
         uses: actions/upload-pages-artifact@v3
         with:
